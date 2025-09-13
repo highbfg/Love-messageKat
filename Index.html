@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Special Message</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 350px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 15px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background: #ff4b5c;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #e63946;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div id="form-section">
+      <h2>Enter your name ❤️</h2>
+      <input type="text" id="nameInput" placeholder="Your name here">
+      <br>
+      <button onclick="showMessage()">Submit</button>
+    </div>
+    <div id="message-section" class="hidden">
+      <h2 id="message"></h2>
+    </div>
+  </div>
+
+  <script>
+    function showMessage() {
+      const name = document.getElementById("nameInput").value.trim();
+      if(name === "") {
+        alert("Please enter your name first 😊");
+        return;
+      }
+      document.getElementById("form-section").classList.add("hidden");
+      document.getElementById("message-section").classList.remove("hidden");
+      document.getElementById("message").innerText = 
+        `I love you and always will, ${name}. Nothing else matters ❤️`;
+    }
+  </script>
+</body>
+</html>
