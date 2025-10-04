@@ -10,7 +10,6 @@
       --accent: #ff66b3;
       --accent-2: #66e0ff;
       --gold: #fcd34d;
-      --glass: rgba(255, 255, 255, 0.08);
     }
 
     html, body {
@@ -97,23 +96,6 @@
       transform: rotateX(140deg);
     }
 
-    .surprise-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 1.6rem;
-      font-weight: 600;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      color: transparent;
-      transition: transform 0.7s cubic-bezier(.22, 1, .36, 1);
-    }
-
-    .gift-box.open .surprise-message {
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-
     .confetti {
       position: fixed;
       top: 0;
@@ -124,11 +106,73 @@
       z-index: 1;
     }
 
+    .birthday-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 20px 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      animation: fadeText 2s ease forwards;
+      animation-delay: 1s;
+      display: none;
+    }
+
+    @keyframes fadeText {
+      from { opacity: 0; transform: translate(-50%, -48%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
     .credit {
       position: absolute;
       bottom: 1rem;
       font-size: 0.8rem;
       opacity: 0.5;
+    }
+
+    .kathryn-image {
+      position: absolute;
+      top: 45%;
+      left: 10%;
+      width: 220px;
+      height: auto;
+      opacity: 0;
+      border-radius: 20px;
+      box-shadow: 0 0 40px var(--gold), 0 0 70px var(--accent);
+      transform: translateY(-50%) scale(0.95);
+      animation: floatImage 4s ease-in-out infinite alternate;
+      transition: opacity 1.5s ease, transform 1.5s ease;
+      display: none;
+    }
+
+    @keyframes floatImage {
+      from { transform: translateY(-50%) scale(0.95); }
+      to { transform: translateY(-53%) scale(1); }
+    }
+
+    .kathryn-image.shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+      animation: shimmer 3s ease-in-out 1;
+      border-radius: 20px;
+    }
+
+    @keyframes shimmer {
+      0% { left: -75%; }
+      100% { left: 125%; }
     }
   </style>
 </head>
@@ -142,7 +186,17 @@
     <div class="gift-box" id="giftBox">
       <div class="lid"></div>
       <div class="box"></div>
-      <div class="surprise-message">✨ You’re truly special ✨</div>
+    </div>
+
+    <!-- Kathryn's image placeholder -->
+    <img src="YOUR_IMAGE_HERE.jpg" alt="Kathryn" id="kathrynImage" class="kathryn-image" />
+
+    <div class="birthday-message" id="birthdayMessage">
+      ✨ Happy Birthday Kathryn ✨<br><br>
+      May your days bloom with joy, your dreams rise higher than ever, and success follow you in every step you take.<br>
+      You deserve every sparkle the world has to offer.<br><br>
+      With love,<br>
+      <strong>Kay ❤️</strong>
     </div>
 
     <div class="credit">Made with ❤️ for Kathryn</div>
@@ -150,26 +204,19 @@
 
   <script>
     const giftBox = document.getElementById('giftBox');
+    const message = document.getElementById('birthdayMessage');
     const canvas = document.getElementById('confettiCanvas');
     const ctx = canvas.getContext('2d');
+    const kathrynImage = document.getElementById('kathrynImage');
 
     let W = canvas.width = window.innerWidth;
     let H = canvas.height = window.innerHeight;
     let confetti = [];
 
-    function rand(min, max) {
-      return Math.random() * (max - min) + min;
-    }
+    function rand(min, max) { return Math.random() * (max - min) + min; }
 
     function createConfetti() {
-      return {
-        x: rand(0, W),
-        y: rand(-H, 0),
-        r: rand(3, 6),
-        color: `hsl(${rand(300, 360)}, 100%, 70%)`,
-        speed: rand(2, 5),
-        tilt: rand(-10, 10)
-      };
+      return { x: rand(0, W), y: rand(-H, 0), r: rand(3, 6), color: `hsl(${rand(300, 360)}, 100%, 70%)`, speed: rand(2, 5), tilt: rand(-10, 10) };
     }
 
     function drawConfetti() {
@@ -208,8 +255,15 @@
 
     giftBox.addEventListener('click', () => {
       giftBox.classList.toggle('open');
+      message.style.display = 'block';
+      kathrynImage.style.display = 'block';
+      setTimeout(() => {
+        kathrynImage.style.opacity = '1';
+        kathrynImage.classList.add('shimmer');
+      }, 800);
       animateConfetti();
     });
   </script>
 </body>
 </html>
+
